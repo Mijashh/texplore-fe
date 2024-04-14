@@ -14,24 +14,29 @@
 
 <script setup>
 import router from '../router/routes.js';
-import { ref } from 'vue';
 import axios from 'axios';
-const token=ref(localStorage.getItem('token'));
+import { ref } from 'vue';
+import { useToast } from 'vue-toastification';
+const toast = useToast();
+
+const responseData = ref('');
+const token = ref(localStorage.getItem('token'));
 const handleLogout = async () => {
   try {
-    const token = localStorage.getItem('token'); 
-    console.log(token)
     await axios.post('http://127.0.0.1:8000/auth/logout/', null, {
       headers: {
-        Authorization: `Token ${token}`, 
+        Authorization: `Token ${token.value}`, 
       },
-    });
+    }).then((response) => {
+      responseData.value = response.data;
+      toast.success(responseData.value.message);
+    })
     localStorage.removeItem('token');
     localStorage.removeItem('email');
-    console.log('Logout successful');
+    token.value='';
     router.push({ name: 'Home' });
   } catch (error) {
-    console.error('Logout failed:', error);
+    console.log(error);
   }
 };
 </script>
