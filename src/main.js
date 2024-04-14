@@ -1,9 +1,17 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import './assets/styles.css'
-import router from './router/routes.js'
+import { createApp } from 'vue';
+import App from './App.vue';
+import './assets/styles.css';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
+import router from './router/routes.js';
 
+const app = createApp(App);
+app.use(router);
 
-const app = createApp(App)
-app.use(router)
-app.mount('#app')
+app.use(Toast, {
+  position: 'top-center',
+  icon: true,
+  transition: "Vue-Toastification__bounce",
+});
+
+app.mount('#app');
