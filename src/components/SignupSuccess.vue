@@ -4,16 +4,13 @@
       <h2 class="text-xl font-bold mb-4">Signup Successful</h2>
       <p class="text-gray-700 mb-4">Congratulations! Your signup was successful.</p>
       <p class="text-gray-700 mb-6">You can now login to your account.</p>
-      <button @click="redirectToLogin" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Login</button>
+      <button @click="$emit('close')"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Login</button>
     </div>
   </div>
 </template>
 
 <script setup>
-
-import router from '../router/routes.js';
-const redirectToLogin = () => {
-  router.push({ name: 'Login' });
-}
-
+import { defineEmits } from 'vue';
+defineEmits(['close']);
 </script>
