@@ -9,9 +9,14 @@ const app = createApp(App);
 app.use(router);
 
 app.use(Toast, {
-  position: 'top-center',
-  icon: true,
-  transition: "Vue-Toastification__bounce",
+  position: 'top-right',
+  timeout: 1500,
+  closeOnClick: true,
+  pauseOnHover: false,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: true,
+  closeButton: 'button',
 });
-
 app.mount('#app');
