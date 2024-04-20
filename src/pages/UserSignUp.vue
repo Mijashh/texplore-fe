@@ -4,25 +4,20 @@
             <h1 class="text-3xl font-bold mb-5">Sign Up</h1>
             <form @submit.prevent="signup">
                 <div class="mb-4">
-                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
-                    <input type="text" id="name" name="name" v-model="name"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
+                    <vinput :type="'text'" :id="'name'" :name="'name'" v-model="name" :error="error" />
                 </div>
                 <div class="mb-6">
-                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Contact Number</label>
-                    <input type="text" id="contact" name="contact" v-model="contact"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label for="contact_no" class="block text-gray-700 text-sm font-bold mb-2">Contact Number</label>
+                    <vinput :type="'tel'" :id="'contact_no'" :name="'contact_no'" v-model="contact_no" :error="error" />
                 </div>
                 <div class="mb-6">
                     <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                    <input type="email" id="email" name="email" v-model="email"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <vinput :type="'email'" :id="'email'" :name="'email'" :required=true v-model="email" :error="error" />
                 </div>
                 <div class="mb-6">
                     <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                    <input type="password" id="password" name="password" v-model="password"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" required>
-                    <p class="text-red-500 text-md italic border-red-500 " v-if="signuperror">{{ signuperror }}</p>
+                    <vinput :type="'password'" :id="'password'" :name="'password'" v-model="password" :error="error" />
                 </div>
                 <div class="flex items-center justify-between">
                     <button
@@ -36,54 +31,21 @@
                     </a>
                 </div>
             </form>
-            <signupsucess v-if="successful" class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50" />
+            <signupsucess v-if="successful"
+                class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50" @close="redirectoLogin" />
         </div>
     </div>
-    
+
 </template>
 
 
-
-
-
-
 <script setup>
-import { ref } from 'vue';
+import router from "../router/routes.js";
 import signupsucess from '../components/SignupSuccess.vue';
-import {useToast} from 'vue-toastification'
-import axios from 'axios';
-const toast= useToast();
-const signuperror = ref('');
-const email = ref('');
-const password = ref(''); 
-const name = ref('');
-const contact = ref('');
-const successful = ref(false);
-
-
-const signup = async () => {
-    try {
-        const formData = {
-            email: email.value,
-            password: password.value,
-            name:name.value,
-            contact_no:contact.value
-        };
-        await axios.post('http://127.0.0.1:8000/users/', formData);
-        successful.value = true;
-    } catch (error) {
-        const responseData = error.response.data;
-        let firstValue;
-        for (const key in responseData) {
-            if (Object.hasOwnProperty.call(responseData, key)) {
-                firstValue = responseData[key][0];
-                break; 
-            }
-        }
-        toast.error(firstValue || 'An unexpected error occurred.');
-        successful.value = false;
-    }
-};
-
-
+import userSignup from '../composables/userSignup.js';
+import vinput from '../components/FormInput.vue';
+const {email, password,name,contact_no,signup, successful,error } = userSignup();
+const redirectoLogin = () => {
+    router.push({ name: 'Login' });
+}
 </script>
